@@ -53,8 +53,8 @@ public class UserController {
         response.put("message", "error creating user");
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
-    @PutMapping(value = "{id}")
-    public ResponseEntity updateUser(Long id, @RequestBody User user){
+    @PutMapping(value = "/user/{id}")
+    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody User user){
         Map response = new HashMap();
         Boolean userResp = userServiceImp.updateUser(id, user);
         if(userResp){

@@ -40,6 +40,7 @@ public class UserServiceImp implements UserService {
             userBD.setLastName(user.getLastName());
             userBD.setBirthday(user.getBirthday());
             userBD.setAddress(user.getAddress());
+            userBD.setEmail(user.getEmail());
             userRepository.save(userBD);
             return true;
         }
