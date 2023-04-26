@@ -2,6 +2,7 @@ package com.procesos.inventario.services;
 
 import com.procesos.inventario.models.User;
 import com.procesos.inventario.repository.UserRepository;
+import com.procesos.inventario.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import java.util.Optional;
 public class UserServiceImp implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JWTUtil jwtUtil;
+
     public User getUser(Long id){
         return userRepository.findById(id).get();
     }
@@ -47,5 +51,17 @@ public class UserServiceImp implements UserService {
         catch (Exception e){
             return false;
         }
+    }
+    @Override
+    public String login(User user){
+        Optional<User> userBD =userRepository.findByEmail(user.getEmail());
+        if(userBD.isEmpty()){
+            throw new RuntimeException("user not found");
+        }
+        if(!userBD.get().getPassword().equals(user.getPassword())){
+
+            throw new RuntimeException("password is incorrect");
+        }
+        return jwtUtil.create(String.valueOf(userBD.get().getId()),String.valueOf(userBD.get().getEmail()));
     }
 }
